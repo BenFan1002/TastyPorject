@@ -2,7 +2,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <curl/curl.h>
-//#include <json-c/json.h>
+#include "C:/Users/Wheel of Fortune/Documents/GitHub/TastyPorject/cJSON.h"
+#ifndef GDK_INCLUDE_PATH
+#define GDK_INCLUDE_PATH "C:\msys64\mingw64\include"
+#endif
+#include "C:/msys64/mingw64/include/gtk-4.0/gtk/gtk.h"
 
 struct MemoryStruct {
     char *memory;
@@ -79,6 +83,16 @@ void format_output(const char *input) {
         input++;
     }
 }
+static void on_activate (GtkApplication *app) {
+    // Create a new window
+    GtkWidget *window = gtk_application_window_new (app);
+    // Create a new button
+    GtkWidget *button = gtk_button_new_with_label ("Hello, World!");
+    // When the button is clicked, close the window passed as an argument
+    g_signal_connect_swapped (button, "clicked", G_CALLBACK (gtk_window_close), window);
+    gtk_window_set_child (GTK_WINDOW (window), button);
+    gtk_window_present (GTK_WINDOW (window));
+}
 int main() {
     CURL *hnd = curl_easy_init();
 
@@ -97,16 +111,23 @@ int main() {
     curl_easy_setopt(hnd, CURLOPT_WRITEFUNCTION, WriteMemoryCallback);
     curl_easy_setopt(hnd, CURLOPT_WRITEDATA, (void *)&chunk);
     curl_easy_setopt(hnd, CURLOPT_SSL_VERIFYPEER, 0L); // Disable SSL peer verification
-
+    // Create a new application
+    GtkApplication *app = gtk_application_new ("com.example.GtkApplication",
+                                               G_APPLICATION_FLAGS_NONE);
+    g_signal_connect (app, "activate", G_CALLBACK (on_activate), NULL);
     CURLcode ret = curl_easy_perform(hnd);
-
-    if (ret != CURLE_OK) {
-        fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(ret));
-    } else {
-        printf("Output:\n");
-        format_output(chunk.memory);
-        printf("\n");
+    cJSON* root = cJSON_Parse(chunk.memory);
+    const cJSON *results = cJSON_GetObjectItemCaseSensitive(root, "results");
+    if (cJSON_IsArray(results)) {
+        cJSON *first_result = cJSON_GetArrayItem(results, 0);
+        if (first_result != NULL) {
+            const cJSON *name = cJSON_GetObjectItemCaseSensitive(first_result, "name");
+            if (cJSON_IsString(name)) {
+                printf("Name of first element: %s\n", name->valuestring);
+            }
+        }
     }
+
 
     curl_easy_cleanup(hnd);
     curl_slist_free_all(headers);
