@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Search</title>
+    <link rel="stylesheet" href="testy.css">
+
+</head>
+<body>
+<h1>Recipe Search</h1>
+<label for="search-input">Search for recipes:</label>
+<input type="text" id="search-input" name="search-input">
+<button onclick="search()">Search</button>
+
+<div id="recipe-results"></div>
+
+<script>
+    function search() {
+        console.log("searching");
+        const input = document.getElementById("search-input").value;
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', `http://127.0.0.1:8080/?search-input=${input}`, true);
+        xhr.timeout = 50000; // set a timeout of 5 seconds
+
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                console.log(xhr.response);
+                displayResults(JSON.parse(xhr.response));
+            } else {
+                console.log(`Error: ${xhr.status}`);
+            }
+        };
+
+        xhr.ontimeout = function() {
+            console.log('Error: Request timed out');
+        }
+
+        xhr.onerror = function() {
+            console.log('Error: Network error');
+        }
+
+        xhr.send();
+    }
+    function displayResults(response) {
+        console.log(response);
+        let recipeResults = document.getElementById('recipe-results');
+        recipeResults.innerHTML = ""; // Clear any previous results
+        if (response.results && response.results.length > 0) { // Check if response has results
+            response.results.forEach(recipe => {
+                if (recipe.instructions) {
+                    let recipeDiv = document.createElement('div');
+                    recipeDiv.setAttribute('class', 'recipe');
+                    recipeDiv.innerHTML = `<h3 href="${recipe.beauty_url}">${recipe.name}</h3>`;
+                    recipeDiv.innerHTML += `<p>${recipe.description}</p>`;
+                    let instructionsDiv = document.createElement('div'); // Create a new div for instructions
+                    for (let i = 0; i < recipe.instructions.length; i++) {
+                        instructionsDiv.innerHTML += `<p>${recipe.instructions[i].position}. ${recipe.instructions[i].display_text}</p>`;
+                    }
+                    recipeDiv.appendChild(instructionsDiv); // Append instructionsDiv to recipeDiv
+
+                    recipeResults.appendChild(recipeDiv);
+                }
+            });
+        }
+         else {
+            let errorDiv = document.createElement('div');
+            errorDiv.innerHTML = `<p>Error: No recipes found.</p>`;
+            recipeResults.appendChild(errorDiv);
+        }
+    }
+</script>
+</body>
+</html>
