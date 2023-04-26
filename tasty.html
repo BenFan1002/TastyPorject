@@ -8,11 +8,13 @@
 
 </head>
 <body>
-<h1>Recipe Search</h1>
-<label for="search-input">Search for recipes:</label>
-<input type="text" id="search-input" name="search-input">
-<button onclick="search()">Search</button>
-
+<h1 class="header">Recipe Search</h1>
+<div class="header">
+    <div>
+    <input type="text" id="search-input" name="search-input" placeholder="Input your ingredients here">
+    <button onclick="search()" class = "button-6">Search</button>
+    </div>
+</div>
 <div id="recipe-results"></div>
 
 <script>
@@ -53,6 +55,9 @@
                     recipeDiv.setAttribute('class', 'recipe');
                     recipeDiv.innerHTML = `<h3 href="${recipe.beauty_url}">${recipe.name}</h3>`;
                     recipeDiv.innerHTML += `<p>${recipe.description}</p>`;
+                    if (recipe.thumbnail_url) {
+                        recipeDiv.innerHTML += `<div class="img-wrap"><img id="recipe-thumbnail" src="${recipe.thumbnail_url}" alt="${recipe.name}"></div>`;
+                    }
                     let instructionsDiv = document.createElement('div'); // Create a new div for instructions
                     for (let i = 0; i < recipe.instructions.length; i++) {
                         instructionsDiv.innerHTML += `<p>${recipe.instructions[i].position}. ${recipe.instructions[i].display_text}</p>`;
