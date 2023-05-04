@@ -1,13 +1,11 @@
 #include <stdio.h>
 #include <winsock2.h>
-
 #pragma comment(lib,"ws2_32.lib")
 #define PORT 8080
 #include <stdlib.h>
 #include <string.h>
 #include <curl/curl.h>
-#include "C:/Users/Wheel of Fortune/Documents/GitHub/TastyPorject/cJSON.h"
-//#include "E:/glib-main/glib/glib.h"
+
 
 struct MemoryStruct {
     char *memory;
