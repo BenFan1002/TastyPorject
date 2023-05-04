@@ -16,7 +16,7 @@ link_directories("E:/Curl/lib")
 
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libgcc -static-libstdc++")
 set(CMAKE_C_STANDARD 11)
-add_executable(my_executable tasty.c cJSON.c test.c)
+add_executable(my_executable tasty.c cJSON.c tasty.c)
 
 target_link_libraries(my_executable ws2_32)
 
