@@ -6,6 +6,19 @@
 #include <string.h>
 #include <curl/curl.h>
 
+//Dear Grader,
+//
+//I would like to inform you that this project is based on both HTML and C programming language.
+// In order to view the project, you will first need to run the C code and then open the file "tasty.html".
+// Please note that the C code requires the "curl" library, which is included in the CMakeList.
+// However, the CMakeList is only configured for the "curl" library installed on "E:/Curl/include".
+// If the "curl" library is installed in a different path, you will need to update it accordingly.
+//
+//Additionally, I would like to highlight that this library has been tested on a Windows machine and uses the
+// "winsock2" library. If you wish to run this library on a Linux machine, it may require a different library as
+// "winsock" is not available on Linux.
+//
+//Thank you for your time and consideration.
 
 struct MemoryStruct {
     char *memory;

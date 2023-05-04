@@ -6,11 +6,6 @@ set(CURL_LIBRARY "E:/Curl/lib/libcurl.dll.a")  # For MinGW
 
 
 # gtk
-set(GTK_INCLUDE_DIRS "C:/msys64/mingw64/include/gtk-3.0")
-set(GTK_LIBRARY_DIRS "C:/msys64/mingw64/lib")
-include_directories(${GTK_INCLUDE_DIRS})
-link_directories(${GTK_LIBRARY_DIRS})
-add_definitions(${GTK3_CFLAGS_OTHER})
 include_directories(${CURL_INCLUDE_DIR})
 link_directories("E:/Curl/lib")
 
